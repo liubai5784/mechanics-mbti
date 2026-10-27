@@ -4,3 +4,7 @@
 img{height:auto}.hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.hero>figure{margin:0}h1{font-size:clamp(36px,5vw,48px)}
 @media(max-width:650px){.hero{grid-template-columns:minmax(0,1fr)}.hero h1{font-size:clamp(30px,9vw,42px)}.hero>figure{margin:0 auto}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+
+/* 校园填写入口：延续手账纸张、学院趣味测试的轻量视觉风格。 */
+.entry-wrap{max-width:600px;margin:0 auto}.entry-wrap>.eyebrow{text-align:center}.entry-paper{padding:38px 46px}.entry-paper h1{font-size:clamp(30px,5vw,44px);line-height:1.38}.entry-stamp{display:inline-block;border:1px dashed #a5afa9;border-radius:4px;padding:3px 10px;margin-bottom:18px;color:var(--muted);font-size:11px;letter-spacing:1px}.entry-lead{font-size:14px;color:var(--muted);margin:16px 0 24px}.entry-field{margin:16px 0 6px}.entry-field label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}.entry-field label span{color:#a34c40}.entry-field input{display:block;width:100%;min-height:48px;border:1.5px solid #b6c1bb;border-radius:8px;background:#fffefa;color:var(--ink);font-size:16px;padding:10px 14px}.entry-field input[aria-invalid="true"]{border-color:#b84e44;background:#fff8f6}.entry-field input::placeholder{color:#89949a}.entry-error{min-height:20px;margin:4px 0 0;color:#9d332e;font-size:12px}.entry-submit{width:100%;margin-top:20px}.entry-privacy{font-size:12px;color:var(--muted);margin:20px 0 0;line-height:1.9}@media(max-width:650px){.entry-paper{padding:30px 22px}.entry-wrap{max-width:100%}.entry-paper h1{font-size:32px}}
