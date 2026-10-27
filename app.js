@@ -20,7 +20,30 @@
     app.innerHTML=`<section class="hero"><div><span class="eyebrow">A LITTLE QUIZ, A NEW CONNECTION</span><h1>如果性格有引力，<br>你会与哪门<br><span class="underline">力学同频？</span></h1><p class="lead">把日常里的小习惯，放进力学的世界。<br>12个校园小情境，找到你的力学人格。</p><div class="chips"><span class="chip">12题 · 二选一</span><span class="chip">约2分钟</span><span class="chip">16种人格</span></div><button class="primary" id="start">开始寻找我的同频 <span aria-hidden="true">↗</span></button><p class="privacy">无需登录 · 答案仅在当前页面内计算</p></div><figure class="hero-art"><img src="assets/theoretical.jpg" alt="两位同学在教室中讨论，纸张上写着理论力学人格" width="960" height="960"><figcaption class="caption">MECHANICS PERSONALITY ATLAS / 力学人格图鉴</figcaption></figure></section>${gallery()}<details class="explainer"><summary>这份测试如何得出结果？</summary><p>四个维度 E/I、S/N、T/F、J/P 各3题。每题选择一项，每维按多数票确定一个字母，组成16种类型之一，再按图鉴约定映射到8门课程。课程与性格的联系是趣味创作，12题未经过心理测量验证，不提供心理诊断或选专业建议。</p><p>页面不设置登录、问卷上传、Cookie 或统计追踪；刷新后答题进度会清空。托管服务仍可能记录常规访问日志。</p></details>`;
     document.getElementById('start').onclick=start;bindGallery();top();
   }
-  function start(){document.title='力学 MBTI · 你是哪一门力学？';answers=Array(12).fill(null);current=0;resultType=null;history.replaceState(null,'',location.pathname+location.search);renderQuestion();}
+  // 校园填写入口仅在页面内校验；字段不发送、不持久化，也不放进 URL。
+  function start(){
+    resultType=null;document.title='开始测试 · 力学 MBTI';
+    history.replaceState(null,'',location.pathname+location.search);
+    app.innerHTML=`<section class="entry-wrap" aria-labelledby="entry-title"><span class="eyebrow">校园趣味测试 / 入场券</span><div class="paper entry-paper"><span class="entry-stamp" aria-hidden="true">力学人格研究所 · CAMPUS</span><h1 id="entry-title">找到你的<br><span class="underline">力学同频</span></h1><p class="entry-lead">先填好这张小小的校园入场券，再开启12道趣味选择题。</p><form id="entry-form" novalidate autocomplete="off"><div class="entry-field"><label for="student-id">学号 <span aria-hidden="true">*</span></label><input id="student-id" name="student-id" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="请输入学号（仅数字）" autocomplete="off" aria-describedby="student-id-error" required><p class="entry-error" id="student-id-error" role="status"></p></div><div class="entry-field"><label for="class-name">班级 <span aria-hidden="true">*</span></label><input id="class-name" name="class-name" type="text" placeholder="例如：力学2401" autocomplete="off" aria-describedby="class-name-error" required><p class="entry-error" id="class-name-error" role="status"></p></div><button class="primary entry-submit" type="submit">填写完成，开始测试 →</button></form><p class="entry-privacy">仅检查填写格式，不核验学生身份。填写内容不会上传或由本站保存，进入测试后即不再使用。</p></div><p class="quiz-tip">这是一份校园趣味测试，并非学校身份认证。</p></section>`;
+    const form=app.querySelector('#entry-form'),id=form.querySelector('#student-id'),className=form.querySelector('#class-name');
+    function setError(input,message){
+      const err=form.querySelector('#'+input.id+'-error');err.textContent=message;
+      input.setAttribute('aria-invalid',String(Boolean(message)));
+    }
+    form.addEventListener('submit',e=>{
+      e.preventDefault();
+      const studentId=id.value.trim(),classValue=className.value.trim();
+      const idError=!studentId?'请填写学号。':!/^[0-9]+$/.test(studentId)?'学号仅支持数字，请检查后重试。':'';
+      const classError=!classValue?'请填写班级。':! /^[\u3400-\u9fff]+[0-9]+$/.test(classValue)?'班级格式应为“汉字+数字”，例如：力学2401。':'';
+      setError(id,idError);setError(className,classError);
+      if(idError||classError){(idError?id:className).focus();return;}
+      // 丢弃输入字段及其内容，不建立用户记录。
+      form.reset();startQuiz();
+    });
+    [id,className].forEach(input=>input.addEventListener('input',()=>setError(input,'')));
+    top();
+  }
+  function startQuiz(){document.title='力学 MBTI · 你是哪一门力学？';answers=Array(12).fill(null);current=0;resultType=null;history.replaceState(null,'',location.pathname+location.search);renderQuestion();}
   function renderQuestion(){
     const q=data.questions[current];
     app.innerHTML=`<section class="quiz-wrap" aria-labelledby="question-title"><div class="quiz-meta"><span>凭日常直觉选择，没有标准答案</span><span>${current+1} / 12</span></div><div class="progress" role="progressbar" aria-label="答题进度" aria-valuemin="0" aria-valuemax="12" aria-valuenow="${answers.filter(Boolean).length}"><div style="width:${answers.filter(Boolean).length/12*100}%"></div></div><div class="paper"><div class="question-number">QUESTION ${String(current+1).padStart(2,'0')} / ${q.scene}</div><h1 class="question-title" id="question-title">${q.text}</h1><div class="options" role="group" aria-label="选择更接近日常的选项">${q.options.map((o,i)=>`<button class="option" data-answer="${o[0]}" aria-pressed="${answers[current]===o[0]}"><span class="letter" aria-hidden="true">${i?'B':'A'}</span><span>${o[1]}</span></button>`).join('')}</div><div class="quiz-nav"><button class="text-button" id="prev" ${current===0?'disabled':''}>← 上一题</button><button class="primary" id="next" ${answers[current]?'':'disabled'}>${current===11?'查看我的结果':'下一题 →'}</button></div></div><p class="quiz-tip">选更像平时的自己；两项都像时，选更常见的一项。</p></section>`;
