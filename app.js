@@ -24,7 +24,7 @@
   function start(){
     resultType=null;document.title='开始测试 · 力学 MBTI';
     history.replaceState(null,'',location.pathname+location.search);
-    app.innerHTML=`<section class="entry-wrap" aria-labelledby="entry-title"><span class="eyebrow">校园趣味测试 / 入场券</span><div class="paper entry-paper"><span class="entry-stamp" aria-hidden="true">力学人格研究所 · CAMPUS</span><h1 id="entry-title">找到你的<br><span class="underline">力学同频</span></h1><p class="entry-lead">先填好这张小小的校园入场券，再开启12道趣味选择题。</p><form id="entry-form" novalidate autocomplete="off"><div class="entry-field"><label for="student-id">学号 <span aria-hidden="true">*</span></label><input id="student-id" name="student-id" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="请输入学号（仅数字）" autocomplete="off" aria-describedby="student-id-error" required><p class="entry-error" id="student-id-error" role="status"></p></div><div class="entry-field"><label for="class-name">班级 <span aria-hidden="true">*</span></label><input id="class-name" name="class-name" type="text" placeholder="例如：力学2401" autocomplete="off" aria-describedby="class-name-error" required><p class="entry-error" id="class-name-error" role="status"></p></div><button class="primary entry-submit" type="submit">填写完成，开始测试 →</button></form><p class="entry-privacy">仅检查填写格式，不核验学生身份。填写内容不会上传或由本站保存，进入测试后即不再使用。</p></div><p class="quiz-tip">这是一份校园趣味测试，并非学校身份认证。</p></section>`;
+    app.innerHTML=`<section class="entry-wrap" aria-labelledby="entry-title"><span class="eyebrow">校园趣味测试 / 入场券</span><div class="paper entry-paper"><span class="entry-stamp" aria-hidden="true">力学人格研究所 · CAMPUS</span><h1 id="entry-title">找到你的<br><span class="underline">力学同频</span></h1><p class="entry-lead">先填好这张小小的校园入场券，再开启12道趣味选择题。</p><form id="entry-form" novalidate autocomplete="off"><div class="entry-field"><label for="student-id">学号 <span aria-hidden="true">*</span></label><input id="student-id" name="student-id" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="请输入学号（仅数字）" autocomplete="off" aria-describedby="student-id-error" required><p class="entry-error" id="student-id-error" role="status"></p></div><div class="entry-field"><label for="class-name">班级 <span aria-hidden="true">*</span></label><input id="class-name" name="class-name" type="text" placeholder="请输入班级" autocomplete="off" aria-describedby="class-name-error" required><p class="entry-error" id="class-name-error" role="status"></p></div><button class="primary entry-submit" type="submit">填写完成，开始测试 →</button></form><p class="entry-privacy">仅检查填写格式，不核验学生身份。填写内容不会上传或由本站保存，进入测试后即不再使用。</p></div><p class="quiz-tip">这是一份校园趣味测试，并非学校身份认证。</p></section>`;
     const form=app.querySelector('#entry-form'),id=form.querySelector('#student-id'),className=form.querySelector('#class-name');
     function setError(input,message){
       const err=form.querySelector('#'+input.id+'-error');err.textContent=message;
@@ -34,7 +34,7 @@
       e.preventDefault();
       const studentId=id.value.trim(),classValue=className.value.trim();
       const idError=!studentId?'请填写学号。':!/^[0-9]+$/.test(studentId)?'学号仅支持数字，请检查后重试。':'';
-      const classError=!classValue?'请填写班级。':! /^[\u3400-\u9fff]+[0-9]+$/.test(classValue)?'班级格式应为“汉字+数字”，例如：力学2401。':'';
+      const classError=!classValue?'请填写班级。':! /^[\u3400-\u9fff]+[0-9]+$/.test(classValue)?'班级格式应为“汉字+数字”，请检查后重试。':'';
       setError(id,idError);setError(className,classError);
       if(idError||classError){(idError?id:className).focus();return;}
       // 丢弃输入字段及其内容，不建立用户记录。
