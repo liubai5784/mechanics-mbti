@@ -77,8 +77,8 @@
     if(location.protocol==='file:'){status.textContent='请先部署网页，再复制分享链接。现在可以截图分享。';return;}
     try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(input.value);else{input.focus();input.select();input.setSelectionRange(0,input.value.length);if(!document.execCommand('copy'))throw new Error('copy');}status.textContent='链接已复制，可以粘贴给朋友。';}catch{input.focus();input.select();input.setSelectionRange(0,input.value.length);status.textContent='请长按上方链接，选择复制。';}
   };
-  document.getElementById('brand').onclick=e=>{e.preventDefault();home();};
-  function route(){const m=location.hash.match(/^#type=([A-Z]{4})$/);if(m&&courseFor(m[1]))result(m[1]);else home();}
+  document.getElementById('brand').onclick=e=>{e.preventDefault();start();};
+  function route(){const m=location.hash.match(/^#type=([A-Z]{4})$/);if(m&&courseFor(m[1]))result(m[1]);else start();}
   window.addEventListener('hashchange',route);document.addEventListener('error',e=>{if(e.target.tagName==='IMG'){e.target.alt='图鉴暂时无法载入，请稍后重试。';e.target.classList.add('image-error');}},true);route();
 })();
 
